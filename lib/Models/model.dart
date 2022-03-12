@@ -2,7 +2,7 @@
 
 class MovieModel {
   String? original_title, overview, poster_path;
-  int? vote_average;
+  num? vote_average;
   MovieModel(
       {required this.original_title,
       required this.overview,

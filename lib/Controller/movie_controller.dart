@@ -12,8 +12,9 @@ class MovieController extends GetxController {
   getMovie() async {
     isLoading(true);
     var myList = await fetchMovie.setMovie();
-    movielist = myList.map((e) => MovieModel.fromJson(e)).toList();
-    isLoading(true);
+    movielist.value =
+        myList.map<MovieModel>((e) => MovieModel.fromJson(e)).toList();
+    isLoading(false);
     update();
   }
 }
