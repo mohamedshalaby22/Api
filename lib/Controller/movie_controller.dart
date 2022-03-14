@@ -1,5 +1,6 @@
 import 'package:fetch/Models/model.dart';
 import 'package:fetch/Repository/movie_repo.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -9,6 +10,14 @@ class MovieController extends GetxController {
   var movielist = <MovieModel>[].obs;
   var favouriteList = <MovieModel>[].obs;
   var storage = GetStorage();
+  var searchList = <MovieModel>[].obs;
+  var text = TextEditingController();
+//FormField
+  RxBool onPressed = false.obs;
+  void changePressed() {
+    onPressed.value = !onPressed.value;
+  }
+
   MovieController() {
     getMovie();
     List? storgeFavourite = storage.read<List>('isFavourite');
@@ -33,13 +42,25 @@ class MovieController extends GetxController {
       favouriteList.removeAt(index);
       await storage.remove('isFavourite');
     } else {
-      favouriteList
-          .add(movielist.firstWhere((element) => element.id == movieId));
+      var searchId = movielist.firstWhere((element) => element.id == movieId);
+      favouriteList.add(searchId);
       await storage.write('isFavourite', favouriteList);
     }
   }
 
   bool isFavourite(int movieId) {
     return favouriteList.any((element) => element.id == movieId);
+  }
+
+  void searchListChange(String value) {
+    searchList.value = movielist
+        .where((search) => search.original_title!.toLowerCase().contains(value))
+        .toList();
+    update();
+  }
+
+  void clearSearch() {
+    text.clear();
+    searchListChange('');
   }
 }

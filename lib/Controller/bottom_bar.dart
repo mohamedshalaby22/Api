@@ -16,7 +16,8 @@ class BottomBar extends GetxController {
         icon: Icon(Icons.home_work_outlined), label: 'Home'),
     const BottomNavigationBarItem(
         icon: Icon(Icons.favorite_rounded), label: 'Favorite'),
-    const BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile')
+    const BottomNavigationBarItem(
+        icon: Icon(Icons.shopping_cart), label: 'Cart')
   ];
   void changeIndex(int index) {
     currentIndex = index;

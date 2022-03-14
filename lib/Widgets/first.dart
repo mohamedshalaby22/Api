@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:async';
-
+import 'package:fetch/Components/list_items.dart';
 import 'package:fetch/Constance/const.dart';
 import 'package:fetch/Controller/movie_controller.dart';
 import 'package:flutter/material.dart';
@@ -40,174 +40,194 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  bool onPresses = false;
   @override
   Widget build(BuildContext context) {
     MovieController controller = Get.find<MovieController>();
     return Scaffold(
       drawer: const DrawerPage(),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Image(width: 100, image: AssetImage('assets/Net.png')),
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: Icon(
-                Icons.short_text,
-                color: primary,
-                size: 30,
-              ),
-              // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-
-              //color: Colors.red,
-            );
-          },
-        ),
-      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Obx(() {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: PageView.builder(
-                      controller: _controller,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 400),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    'https://image.tmdb.org/t/p/w500' +
-                                        controller
-                                            .movielist[index].backdrop_path
-                                            .toString())),
-                          ),
-                        );
-                      }),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'My List',
-                              style: TextStyle(color: primary, fontSize: 17),
-                            ),
-                            Icon(
-                              Icons.arrow_forward,
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Builder(
+                        builder: (BuildContext context) {
+                          return IconButton(
+                            onPressed: () => Scaffold.of(context).openDrawer(),
+                            icon: Icon(
+                              Icons.short_text,
                               color: primary,
+                              size: 30,
+                            ),
+                            // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+
+                            //color: Colors.red,
+                          );
+                        },
+                      ),
+                      controller.onPressed.value
+                          ? Expanded(
+                              child: TextFormField(
+                                  onChanged: (value) {
+                                    controller.searchListChange(value);
+                                  },
+                                  keyboardType: TextInputType.text,
+                                  controller: controller.text,
+                                  autofocus: true,
+                                  cursorColor: Colors.white,
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: InputDecoration(
+                                      enabledBorder: const UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white)),
+                                      focusedBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: primary)),
+                                      hintText: 'Search',
+                                      hintStyle:
+                                          const TextStyle(color: Colors.white),
+                                      suffixIcon:
+                                          controller.text.text.isNotEmpty
+                                              ? IconButton(
+                                                  onPressed: () {
+                                                    controller.clearSearch();
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                  ))
+                                              : null)),
                             )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
+                          : const Image(
+                              width: 100, image: AssetImage('assets/Net.png')),
+                      IconButton(
+                          onPressed: () {
+                            controller.changePressed();
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: primary,
+                          )),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.20,
+                    child: PageView.builder(
+                        controller: _controller,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 10,
+                        itemBuilder: (context, index) {
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 400),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                      'https://image.tmdb.org/t/p/w500' +
+                                          controller
+                                              .movielist[index].backdrop_path
+                                              .toString())),
+                            ),
+                          );
+                        }),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'My List',
+                            style: TextStyle(color: primary, fontSize: 17),
+                          ),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: primary,
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      if (controller.searchList.isEmpty)
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.41,
+                          child: controller.searchList.isEmpty &&
+                                  controller.text.text.isNotEmpty
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset('assets/1.png'),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Text(
+                                        'No Result Found',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller.movielist.length,
+                                  itemBuilder: (context, index) => BuildListItem(
+                                      image: 'https://image.tmdb.org/t/p/w500' +
+                                          controller
+                                              .movielist[index].poster_path
+                                              .toString(),
+                                      name: controller
+                                          .movielist[index].original_title
+                                          .toString(),
+                                      id: controller.movielist[index].id!
+                                          .toInt())),
+                        )
+                      else
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.41,
                           child: ListView.builder(
+                              shrinkWrap: true,
                               physics: const BouncingScrollPhysics(),
                               scrollDirection: Axis.horizontal,
-                              itemCount: controller.movielist.length,
+                              itemCount: controller.searchList.length,
                               itemBuilder: (context, index) => BuildListItem(
                                   image: 'https://image.tmdb.org/t/p/w500' +
-                                      controller.movielist[index].poster_path
+                                      controller.searchList[index].poster_path
                                           .toString(),
                                   name: controller
-                                      .movielist[index].original_title
+                                      .searchList[index].original_title
                                       .toString(),
-                                  id: controller.movielist[index].id!.toInt())),
+                                  id: controller.searchList[index].id!
+                                      .toInt())),
                         )
-                      ],
-                    ))
-              ],
+                    ],
+                  )
+                ],
+              ),
             );
           }
         }),
-      ),
-    );
-  }
-}
-
-class BuildListItem extends StatelessWidget {
-  MovieController controller = Get.find<MovieController>();
-  BuildListItem(
-      {Key? key, required this.image, required this.name, required this.id})
-      : super(key: key);
-  String image;
-  String name;
-  int id;
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => Container(
-        width: MediaQuery.of(context).size.width * 0.53,
-        padding: const EdgeInsets.all(15),
-        margin: const EdgeInsets.only(right: 20),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade50,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.30,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    image,
-                    fit: BoxFit.fill,
-                  )),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: Text(
-                    name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    controller.changeFavorite(id);
-                  },
-                  child: controller.isFavourite(id)
-                      ? Icon(
-                          Icons.favorite,
-                          color: primary,
-                        )
-                      : Icon(
-                          Icons.favorite_outline,
-                          color: backGround,
-                        ),
-                )
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

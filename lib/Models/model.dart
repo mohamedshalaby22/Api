@@ -1,14 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
 
 class MovieModel {
-<<<<<<< HEAD
   String? original_title, overview, backdrop_path, poster_path;
   num? vote_average;
   int? id;
-=======
-  String? original_title, overview, poster_path;
-  num? vote_average;
->>>>>>> e4209fc83f10d06e70d8124267142384fc46c706
+
   MovieModel(
       {required this.original_title,
       required this.id,
