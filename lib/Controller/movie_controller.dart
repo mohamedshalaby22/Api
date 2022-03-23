@@ -41,9 +41,10 @@ class MovieController extends GetxController {
     if (index >= 0) {
       favouriteList.removeAt(index);
       await storage.remove('isFavourite');
+       await storage.write('isFavourite', favouriteList);
     } else {
-      var searchId = movielist.firstWhere((element) => element.id == movieId);
-      favouriteList.add(searchId);
+      favouriteList
+          .add(movielist.firstWhere((element) => element.id == movieId));
       await storage.write('isFavourite', favouriteList);
     }
   }

@@ -1,4 +1,5 @@
 import 'package:fetch/Constance/const.dart';
+import 'package:fetch/Test/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -27,10 +28,10 @@ class MyApp extends StatelessWidget {
               elevation: 0.0,
               systemOverlayStyle: SystemUiOverlayStyle(
                   statusBarColor: Colors.transparent,
-                  statusBarIconBrightness: Brightness.light))),
+                  statusBarIconBrightness: Brightness.dark))),
       debugShowCheckedModeBanner: false,
       initialBinding: BindingController(),
-      home: const HomeLayout(),
+      home: HomePage(),
     );
   }
 }
