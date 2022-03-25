@@ -1,12 +1,10 @@
 import 'package:fetch/Constance/const.dart';
-import 'package:fetch/Test/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'Binding/binding.dart';
-import 'Widgets/home_layout.dart';
+import 'Test/views/home_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +29,7 @@ class MyApp extends StatelessWidget {
                   statusBarIconBrightness: Brightness.dark))),
       debugShowCheckedModeBanner: false,
       initialBinding: BindingController(),
-      home: HomePage(),
+      home: const HomeLayoutTest(),
     );
   }
 }

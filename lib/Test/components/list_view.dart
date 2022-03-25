@@ -25,20 +25,23 @@ class DefaultListView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          DefaultText1(text: name, size: 17, color: Colors.black),
-          const SizedBox(
-            height: 15,
-          ),
-          Center(
-            child: Container(
-              width: 90,
-              height: 90,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey.shade100,
-                  image: DecorationImage(
-                      fit: BoxFit.fill, image: NetworkImage(image))),
+          // DefaultText1(text: name, size: 17, color: Colors.black),
+          // const SizedBox(
+          //   height: 15,
+          // ),
+          Hero(
+            tag: image,
+            child: Center(
+              child: Container(
+                width: 150,
+                height: 150,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.grey.shade100,
+                    image: DecorationImage(
+                        fit: BoxFit.fill, image: NetworkImage(image))),
+              ),
             ),
           ),
           const SizedBox(
@@ -46,7 +49,7 @@ class DefaultListView extends StatelessWidget {
           ),
           DefaultText(
             text: '\$$price',
-            size: 22,
+            size: 20,
           ),
           DefaultText1(size: 15, text: 'price', color: Colors.grey.shade600),
         ],

@@ -3,6 +3,8 @@
 import 'package:fetch/Test/components/components.dart';
 import 'package:fetch/Test/components/list_view.dart';
 import 'package:fetch/Test/controller/controller.dart';
+import 'package:fetch/Test/views/detail.dart';
+import 'package:fetch/Test/views/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,8 +17,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeController controller = Get.find<HomeController>();
     return Scaffold(
+      drawer: const DefaultDrawer(),
       extendBodyBehindAppBar: true,
-      appBar: AppBar(),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.transparent, size: 60),
+      ),
       backgroundColor: Colors.white,
       body: Obx(() {
         if (controller.isLoaing.value) {
@@ -32,10 +37,14 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  DefaultIcon(
-                    iconData: Icons.sort_sharp,
-                    onTap: () {},
-                  ),
+                  Builder(builder: (BuildContext context) {
+                    return DefaultIcon(
+                      iconData: Icons.sort_sharp,
+                      onTap: () {
+                        // Scaffold.of(context).openDrawer();
+                      },
+                    );
+                  }),
                   DefaultIcon(
                     iconData: Icons.shopping_bag_outlined,
                     onTap: () {},
@@ -74,7 +83,7 @@ class HomePage extends StatelessWidget {
                   itemCount: 3,
                   itemBuilder: (context, index) => PageViewList(
                     image: controller.productList[index].image.toString(),
-                    name: controller.content[index]['name'],
+                    name: controller.productList[index].title.toString(),
                     title: controller.content[index]['title'],
                   ),
                 ),
@@ -115,10 +124,22 @@ class HomePage extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.productList.length,
-                        itemBuilder: (context, index) => DefaultListView(
-                          image: controller.productList[index].image.toString(),
-                          name: controller.content[index]['name'],
-                          price: controller.productList[index].price.toString(),
+                        itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            Get.to(
+                                DetailPage(
+                                    productModel:
+                                        controller.productList[index]),
+                                transition: Transition.cupertinoDialog);
+                          },
+                          child: DefaultListView(
+                            image:
+                                controller.productList[index].image.toString(),
+                            name:
+                                controller.productList[index].title.toString(),
+                            price:
+                                controller.productList[index].price.toString(),
+                          ),
                         ),
                       ),
                     )
