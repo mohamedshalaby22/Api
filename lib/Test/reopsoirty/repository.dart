@@ -10,6 +10,7 @@ class FetchDataFromApi {
           await http.get(Uri.parse('https://my-apis1.herokuapp.com/products'));
       if (response.statusCode == 200) {
         List body = jsonDecode(response.body);
+
         return body;
       }
     } catch (e) {

@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:fetch/Test/components/components.dart';
+import 'package:fetch/Test/controller/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class DefaultListView extends StatelessWidget {
   DefaultListView({
@@ -9,12 +11,16 @@ class DefaultListView extends StatelessWidget {
     required this.image,
     required this.name,
     required this.price,
+    required this.id,
   }) : super(key: key);
   String image;
   String name;
   String price;
+  String id;
+
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.find<HomeController>();
     return Container(
       margin: const EdgeInsets.only(right: 20),
       width: 170,
@@ -25,10 +31,6 @@ class DefaultListView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // DefaultText1(text: name, size: 17, color: Colors.black),
-          // const SizedBox(
-          //   height: 15,
-          // ),
           Hero(
             tag: image,
             child: Center(
@@ -47,11 +49,39 @@ class DefaultListView extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          DefaultText(
-            text: '\$$price',
-            size: 20,
-          ),
-          DefaultText1(size: 15, text: 'price', color: Colors.grey.shade600),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  DefaultText(
+                    text: '\$$price',
+                    size: 20,
+                  ),
+                  DefaultText1(
+                      size: 15, text: 'price', color: Colors.grey.shade600),
+                ],
+              ),
+              Obx(
+                () => CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                      onPressed: () {
+                        //controller.favouriteChange(id);
+                      },
+                      icon: controller.isFavoriteList(id)
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
+                          : const Icon(
+                              Icons.favorite_border,
+                              color: Colors.black,
+                            )),
+                ),
+              )
+            ],
+          )
         ],
       ),
     );

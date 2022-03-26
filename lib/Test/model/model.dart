@@ -1,19 +1,21 @@
+import 'dart:ffi';
+
 class ProductModel {
   String? image;
-  String? des;
+  String? desc;
   String? price;
   String? title;
-  int? id;
+  String? id;
   ProductModel({
     required this.image,
-    required this.des,
+    required this.desc,
     required this.price,
     required this.id,
     required this.title,
   });
   ProductModel.fromJson(Map<String, dynamic> json) {
     image = json['image'];
-    des = json['des'];
+    desc = json['desc'];
     price = json['price'];
     id = json['id'];
     title = json['title'];
@@ -21,7 +23,7 @@ class ProductModel {
   toJson() {
     return {
       'image': image,
-      'des': des,
+      'desc': desc,
       'price': price,
       'id': id,
       'title': title,

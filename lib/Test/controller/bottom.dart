@@ -1,4 +1,4 @@
-import 'package:fetch/Test/views/favourite.dart';
+import 'package:fetch/Test/views/favorite.dart';
 import 'package:fetch/Test/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class BottomNaviBar extends GetxController {
   List<Widget> pages = [
     const HomePage(),
-    const FavouitePage(),
+    const FavoriteScreen(),
   ];
   List<BottomNavigationBarItem> items = [
     const BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
